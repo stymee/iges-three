@@ -1,0 +1,9 @@
+{
+    "arrowParens": "avoid",
+    "bracketSpacing": false,
+    "singleQuote": true,
+    "svelteSortOrder": "scripts-markup-styles",
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "printWidth": 120
+}

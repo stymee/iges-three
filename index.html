@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Stymee's Iges Three v0.5</title>
+    </head>
+    <body>
+        <canvas id="webgl"></canvas>
+        <header>
+            <h1>Stymee's Iges Three v0.5</h1>
+        </header>
+
+        <nav>
+            <button id="btnFile" type="button" aria-label="Load File">
+                <span>Load File</span>
+            </button>
+            <input id="inputFile" type="file" accept=".iges,.igs" />
+        </nav>
+
+        <footer>
+            <span>|</span>
+            <span id="spanProgress">00%</span>
+            <progress id="barProgress" value="0" max="100"></progress>
+            <span>|</span>
+        </footer>
+
+        <script type="module" src="/main.ts"></script>
+    </body>
+</html>

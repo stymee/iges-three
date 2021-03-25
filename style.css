@@ -1,0 +1,218 @@
+:root {
+    --c-border: #a5a5a5;
+    --c-text: #a5a5a5;
+    --c-dark: #555;
+    --c-bg: rgb(1, 1, 1);
+    --c-bg-transparent: rgb(1, 1, 1, 0.3);
+    --c-focus: #0053ba;
+    --fontsize: 0.75rem;
+    --fontsize-small: 0.625rem;
+    --z-ui: 100;
+    --z-canvas: 10;
+}
+html,
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 0.75rem;
+    background-color: var(--c-dark);
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    display: block;
+    z-index: -1;
+}
+
+
+
+header {
+    top: 0;
+    left: 0px;
+    z-index: var(--z-ui);
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    color: var(--c-text);
+    opacity: 0.9;
+    background: var(--c-bg-transparent);
+    display: flex;
+    align-items: center;
+    align-content: flex-start;
+    pointer-events: none;
+}
+header > h1 {
+    margin-left: 7px;
+}
+header > h2 {
+    margin-left: 7em;
+}
+header > span {
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-left: 1em;
+}
+
+nav {
+    top: 60px;
+    left: 0px;
+    z-index: var(--z-ui);
+    position: absolute;
+    color: var(--c-text);
+    opacity: 0.9;
+    background: var(--c-bg-transparent);
+    border-bottom-right-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+nav > span {
+    margin-left: 7px;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+nav > button {
+    margin-left: 0.5em;
+}
+nav > button > span {
+    margin-left: 0.5em;
+}
+nav > hr {
+    width: 100%;
+}
+nav > #btnToolBarCollapse {
+    position: absolute;
+    top: 0px;
+    left: 145px;
+    visibility: visible;
+}
+nav > #btnToolBarExpand {
+    position: absolute;
+    top: 0px;
+    left: 40px;
+    visibility: hidden;
+}
+nav > .span-label, nav > label {
+    margin-top: 0.7em;
+    margin-left: 10px;
+    font-size: 0.75rem;
+    font-weight: normal;
+}
+nav > input[type='range'] {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+nav > input[type='checkbox'] {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 25px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 22px;
+    width: 100%;
+    z-index: var(--z-ui);
+    color: var(--c-text);
+    opacity: 0.9;
+    background: var(--c-bg-transparent);
+    text-align: left;
+    vertical-align: middle;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+}
+footer > span {
+    margin-left: 0.4em;
+}
+footer > progress {
+    -webkit-appearance: none;
+}
+::-moz-progress-bar {
+    background: transparent;
+}
+::-webkit-progress-bar {
+    background-color: transparent;
+    /* border: 1px solid var(--c-dark); */
+}
+::-webkit-progress-value {
+    background: var(--c-dark);
+    /* color: var(--c-dark); */
+}
+footer > progress {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    margin-left: 5px;
+    margin-right: 2px;
+    width: 300px;
+    height: 10px;
+    /* color: var(--c-border); */
+    /* background-color: var(--c-dark); */
+}
+#spanProgress {
+    margin-left: 0;
+    min-width: none;
+    padding-left: 0;
+    /* width: 30px; */
+}
+
+hr {
+    border-top: 1px solid var(--c-border);
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: none;
+    margin-top: 0.4em;
+    margin-bottom: 0.5em;
+}
+
+button {
+    border: 1px solid transparent;
+    border-radius: 2px;
+    outline: none;
+    padding: 0 0.2em;
+    margin: 0.1em 0.2em;
+    height: 2.2em;
+    background: none;
+    color: var(--c-text);
+    cursor: pointer;
+    transition: background 50ms ease-in-out, transform 50ms ease;
+    display: flex;
+    align-items: center;
+}
+
+button:hover {
+    border: 1px solid var(--c-border);
+}
+
+button:active {
+    transform: scale(0.99);
+}
+
+/**
+  input button hacks, ugh
+*/
+input[type='file'] {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    top: -10px;
+    left: -10px;
+}
+
+.label {
+    color: var(--c-text);
+    /* font-family: sans-serif; */
+    /* padding: 2px; */
+    /* background: rgba(0, 0, 0, 0.6); */
+}
