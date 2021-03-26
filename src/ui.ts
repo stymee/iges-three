@@ -3,6 +3,8 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 export const initUI = () => {
     const canvas = <HTMLCanvasElement>document.getElementById('webgl');
+    const btnFile = <HTMLButtonElement>document.getElementById('btnFile');
+    const inputFile = <HTMLInputElement>document.getElementById('inputFile');
 
     const mouse = {
         x: 0,
@@ -37,9 +39,10 @@ export const initUI = () => {
     renderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     /**
-     *
-     * expose these for the event listeners
+     * event listeners
      */
+    btnFile.addEventListener('click', () => inputFile.click())
+
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -63,6 +66,7 @@ export const initUI = () => {
 		scene,
 		camera,
 		mouse,
-		tick
+		tick,
+        inputFile
 	}
 };
