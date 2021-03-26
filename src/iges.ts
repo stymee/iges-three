@@ -1,35 +1,17 @@
 export const loadIgesFile = async (file: File): Promise<string> => {
     console.log(`in loadIges, file is ${file.name}`);
 
+    const text = await file.text();
     console.time('rip');
-    for (let line of await (await file.text()).split('\n')) {
-        let section = line[72] as Section;
-        const lineNo = parseInt(line.slice(73));
-        switch (section) {
-            case 'S':
-				debugger;
-                break;
-            case 'G':
-                break;
-            case 'D':
-                break;
-            case 'P':
-                break;
-            case 'T':
-                break;
-        }
-        console.log(`section:${section} = ${sectionNames[section]}, #:${lineNo}`);
-		if (section === 'T') break;
-    }
+    const data = getMap(text);
     console.timeEnd('rip');
-
-    //console.log(getNextCharUntilNewLine({start: 0, loc: 0, arr: contents}));
+    
+    console.log(data)
 
     return `Loaded ${file.name}`;
 };
 
 type Section = 'S' | 'G' | 'D' | 'P' | 'T';
-
 const sectionNames = {
 	S:'Start',
 	G:'Global',
@@ -38,14 +20,21 @@ const sectionNames = {
 	T:'Terminate'
 }
 
+const getSection = (line: string) => line[72] as Section;
 
-// just an attempt at some recursive line ripping
-// files are small so a straight up read is fine
-const getNextCharUntilNewLine = (params: {start: number; loc: number; arr: Uint8Array}) => {
-    if (params.arr[params.loc + 1] !== 10) {
-        return getNextCharUntilNewLine({start: params.start, loc: params.loc + 1, arr: params.arr});
-    } else {
-        let line = new TextDecoder().decode(params.arr.slice(params.start, params.loc));
-        return line;
-    }
-};
+const getLineNo = (line: string) => parseInt(line.slice(74))
+
+const getMap = (text: string) => {
+    const ret = new Map<Section, Array<string>>();
+    ret.set('S', new Array<string>());
+    ret.set('G', new Array<string>());
+    ret.set('D', new Array<string>());
+    ret.set('P', new Array<string>());
+    ret.set('T', new Array<string>());
+    text.split('\n')
+        .filter(s => s.length === 80)
+        .forEach(s => ret.get(getSection(s)).push(s));
+    return ret;
+}
+
+
