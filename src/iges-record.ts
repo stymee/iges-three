@@ -29,7 +29,7 @@ export const parseRecords = (text: string) => {
     }, init);
 
     console.timeEnd('parseRecords');
-    console.log(ret.records);
+    //console.log(ret.records);
     return ret.records;
 };
 
@@ -80,6 +80,7 @@ export const parseRecord = (char: string, rec: ParsedRecord) => {
                 r.props.push([r.lineNo, r.value]);
             }
             r.records.push(r.props);
+            r.props = new Array<[number, string]>();
             r.value = '';
             r.hLength = 0;
             r.position = 0;

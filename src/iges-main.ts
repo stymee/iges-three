@@ -24,10 +24,13 @@ export const loadIgesFile = async (file: File): Promise<string> => {
 
     const text = await file.text();
     const iges = parse(text);
-
-    console.log(globalProperties.AuthorName);
+    
     console.log(getGlobalProperty(iges, globalProperties.AuthorName));
     console.log(getGlobalProperty(iges, globalProperties.MinimumModelResolution));
+
+    console.log('Global', iges.global);
+    console.log('Entities', iges.entities);
+    console.log('Parameters', iges.parameters);
 
     return `${(performance.now() - perf).toFixed(3)} ms to load |${file.name}|`;
 };

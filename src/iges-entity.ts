@@ -13,8 +13,8 @@ export const parseEntities = (textArray: Array<string>) => {
         })
         .filter(s => s);
 
-    console.timeEnd('parseDirectories');
-    console.log(ret);
+    console.timeEnd('parseEntities');
+    //console.log(ret);
     return new Array<IgesEntity>();
 };
 
@@ -31,8 +31,8 @@ export const parseEntities = (textArray: Array<string>) => {
 
 const parseDentity = (p: {line1: string; line2: string}) => {
     const plen = 8;
-    const pcount = 9;
-    const ret = new Array<number>();
+    const pcount = 10;
+    const ret = new Array<string>();
     for (let i = 0; i < pcount; i++) {
         const prop = parseDentityProp({line: p.line1, i: i, len: plen});
         ret.push(prop);
@@ -46,8 +46,8 @@ const parseDentity = (p: {line1: string; line2: string}) => {
 
 const parseDentityProp = (p: {line: string; i: number; len: number}) => {
     const str = p.line.slice(p.i * p.len, p.i * p.len + p.len);
-    const ret = parseInt(str);
+    //const ret = parseInt(str);
     // console.log(`"012345678" ${p.i}`)
     // console.log(`"${str}"=>${ret}`)
-    return ret;
+    return str.trim();
 };
