@@ -6,7 +6,7 @@ I've been an open source lurker and taker for years, this is my first real attem
 
 https://shocksolution.files.wordpress.com/2017/12/iges5-3_fordownload.pdf
 
-If you haven't used THREE.Js you are really missing out, it makes you look like a super hero by creating seriously professional 3D graphics without having to get to close too the metal.
+If you haven't used THREE.Js you are really missing out, it makes you look like a super hero by creating seriously professional 3D graphics without having to get too close to the metal.
 
 https://threejs.org/
 
