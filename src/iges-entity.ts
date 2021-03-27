@@ -1,4 +1,4 @@
-import { IgesEntity } from "./iges-types";
+import { IgesEntity } from "./iges-spec";
 
 // record parsing loop, don't really need this but it's handy
 export const parseEntities = (textArray: Array<string>) => {

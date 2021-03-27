@@ -1,4 +1,4 @@
-import { igesColumnMarkers, IgesProp, IgesRecord } from "./iges-types";
+import { igesColumnMarkers, IgesProp, IgesRecord } from "./iges-spec";
 
 type ParsedRecord = {
     value: string;
@@ -9,8 +9,6 @@ type ParsedRecord = {
     props: Array<IgesProp>;
     lineNo: number;
 };
-
-
 
 
 // record parsing loop, don't really need this but it's handy

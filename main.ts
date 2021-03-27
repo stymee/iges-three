@@ -1,6 +1,6 @@
 import './style.css';
 import { initUI } from './src/ui';
-import {loadIgesFile} from './src/iges';
+import { loadIgesFile } from './src/iges-main';
 
 const ui = initUI()
 
@@ -12,8 +12,6 @@ ui.inputFile.addEventListener('change', async (e:InputEvent) => {
 
     console.log(ret);
 });
-
-
 
 
 const tick = () => {

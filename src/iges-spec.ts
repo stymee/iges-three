@@ -53,6 +53,20 @@ export const globalProperties = {
     MilSpecProtocol: <IgesGlobalProperty>[25, 'string']
 };
 
+export const getGlobalProperty = (iges: IgesData, prop: [number, IgesGlobalPropertyType]) => {
+    const [propIndex, propType] = prop;
+    const [, propValue] = iges.global[0][propIndex];
+    switch (propType) {
+        case 'string':
+            return propValue;
+        case 'integer':
+            return parseInt(propValue);
+        case 'real':
+            return parseFloat(propValue);
+    }
+};
+
+
 /**
  * Directory Entry section array map
  * from Iges 5.3 spec page 24

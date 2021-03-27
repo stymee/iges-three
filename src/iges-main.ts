@@ -1,6 +1,6 @@
+import { getGlobalProperty, globalProperties, igesColumnMarkers, IgesData, Section } from './iges-spec';
 import { parseEntities } from './iges-entity';
 import { parseRecords } from './iges-record';
-import { IgesData, Section, igesColumnMarkers } from './iges-types';
 
 
 // the whole shebang
@@ -18,6 +18,22 @@ export const parse = (text: string): IgesData => {
     };
 };
 
+export const loadIgesFile = async (file: File): Promise<string> => {
+    const perf = performance.now();
+    console.log(`in loadIges, file is ${file.name}`);
+
+    const text = await file.text();
+    const iges = parse(text);
+
+    console.log(globalProperties.AuthorName);
+    console.log(getGlobalProperty(iges, globalProperties.AuthorName));
+    console.log(getGlobalProperty(iges, globalProperties.MinimumModelResolution));
+
+    return `${(performance.now() - perf).toFixed(3)} ms to load |${file.name}|`;
+};
+
+
+
 // initial map parsing functions
 const sectionLetter = (line: string) => line[igesColumnMarkers.sectionNo] as Section;
 const igesMap = (text: string) => {
@@ -32,5 +48,3 @@ const igesMap = (text: string) => {
         .forEach(s => ret.get(sectionLetter(s)).push(s));
     return ret;
 };
-
-// 
