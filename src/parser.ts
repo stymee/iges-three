@@ -1,6 +1,12 @@
 type Section = 'S' | 'G' | 'D' | 'P' | 'T';
 
 //const lineNo = (line: string) => parseInt(line.slice(74));
+
+const columns = {
+	sectionNo: 72,
+	max: 80
+}
+
 export const parse = (text: string): any[] => {
     const ret = [];
     const imap = igesMap(text);
@@ -11,7 +17,7 @@ export const parse = (text: string): any[] => {
     return ret;
 };
 
-const sectionLetter = (line: string) => line[72] as Section;
+const sectionLetter = (line: string) => line[columns.sectionNo] as Section;
 const igesMap = (text: string) => {
     const ret = new Map<Section, Array<string>>();
     ret.set('S', new Array<string>());
@@ -20,7 +26,7 @@ const igesMap = (text: string) => {
     ret.set('P', new Array<string>());
     ret.set('T', new Array<string>());
     text.split('\n')
-        .filter(s => s.length === 80)
+        .filter(s => s.length === columns.max)
         .forEach(s => ret.get(sectionLetter(s)).push(s));
     return ret;
 };
@@ -63,12 +69,12 @@ const parseRecord = (char: string, rec: ParsedRecord) => {
     r.column++;
 
     // line number section, throw this out
-    if (r.column >= 73 && r.column <= 80) {
+    if (r.column >= columns.sectionNo + 1 && r.column <= columns.max) {
         return r;
     }
 
     // back to the beginning of a new colum
-    if (r.column > 80) {
+    if (r.column > columns.max) {
 		r.lineNo ++;
         r.column = 1;
     }
