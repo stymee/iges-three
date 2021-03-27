@@ -2,7 +2,7 @@
 
 ## Hello fellow interweb dwellers!
 
-I've been an open source lurker and taker for years, this is my first real attempt to give something back. I've been working on some THREE.Js projects lately and have found the need to import some iges (sometiemes igs) data into my applications. The .iges (sometimes .igs, or .IGS if you are on windows 95) file format has been around forever. IGES stands for Initial Graphics Exchange Specification. I must be losing my googlefoo because I haven't been able to find any libraries that can take a raw iges file and generate the relevant THREE.Js elements. There are some libraries available in Python and C++, but I figured I'd start from scratch. In case you are intersted the latest spec (5.3) was released in 1996, it can be found here. It's only 650 pages!
+I've been an open source lurker and taker for years, this is my first real attempt to give something back. I've been working on some THREE.Js projects lately and have found the need to import some iges data into my applications. The .iges (sometimes .igs, or .IGS if you are on windows 95) file format has been around forever. IGES stands for Initial Graphics Exchange Specification. I must be losing my googlefoo because I haven't been able to find any libraries that can take a raw iges file and generate the relevant THREE.Js elements. There are some libraries available in Python and C++, but I figured I'd start from scratch. In case you are intersted the latest spec (5.3) was released in 1996, it can be found here. It's only 650 pages!
 
 https://shocksolution.files.wordpress.com/2017/12/iges5-3_fordownload.pdf
 
