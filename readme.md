@@ -14,7 +14,7 @@ Also have to plug an awesome THREE.Js course available here.  It is WELL worth t
 
 https://threejs-journey.xyz/
 
-There are newer formats like stp (STEP), but they often require a special license to export (at least from Catia).  For fairly simple wireframe geometry iges is the ticket.  It is well supported among almost all CadCam systems, so it is the format of choice when interoperating between systems.
+There are newer formats like stp (STEP), but they often require a special license to export (at least from Catia).  For fairly simple wireframe geometry iges is the ticket.  It is well supported among almost all CadCam systems, so it is still a format of choice when interoperating between systems.
 
 Here's a picture of my dogs just to keep y'all interested:
 
