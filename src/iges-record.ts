@@ -8,6 +8,7 @@ type ParsedRecord = {
     records: Array<IgesRecord>;
     props: Array<IgesProp>;
     lineNo: number;
+    skipUntilEnd: boolean;
 };
 
 
@@ -21,9 +22,11 @@ export const parseRecords = (text: string) => {
         hLength: 0,
         records: new Array<Array<[number, string]>>(),
         props: new Array<[number, string]>(),
-        lineNo: 1
+        lineNo: 1,
+        skipUntilEnd: false
     };
 
+    //debugger;
     const ret = [...text].reduce((acc, val) => {
         return parseRecord(val, acc);
     }, init);
@@ -48,6 +51,7 @@ export const parseRecord = (char: string, rec: ParsedRecord) => {
     // back to the beginning of a new colum
     if (r.column > igesColumnMarkers.max) {
         r.lineNo++;
+        r.skipUntilEnd = false;
         r.column = 1;
     }
 
@@ -91,11 +95,15 @@ export const parseRecord = (char: string, rec: ParsedRecord) => {
             r.hLength = parseInt(r.value);
             r.position = 0;
             r.value = '';
+            r.skipUntilEnd = false;
             break;
 
         // ongoing capture
         default:
-            r.value += char !== ' ' ? char : '';
+            if (r.hLength === 0 && char === ' ') {
+                r.skipUntilEnd = true;
+            }
+            r.value += r.skipUntilEnd ? '' : char;
             r.position++;
             break;
     }
