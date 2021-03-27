@@ -16,7 +16,7 @@ https://shocksolution.files.wordpress.com/2017/12/iges5-3_fordownload.pdf
 There are newer formats like stp (STEP), but they often require a special license to export (at least from Catia).  For fairly simple wireframe geometry iges is the ticket.  It is well supported among almost all CadCam systems, so it is the format of choice when interoperating between systems.
 
 Here's a picture of my dogs just to keep y'all interested:
-https://photos.app.goo.gl/AG1B6cm26SvND6Qu6
+![https://photos.app.goo.gl/AG1B6cm26SvND6Qu6]
 
 ## built on Vite and Typescript
 
