@@ -1,20 +1,53 @@
+// types and constants
 type Section = 'S' | 'G' | 'D' | 'P' | 'T';
+
+type ParsedRecord = {
+    value: string;
+    position: number;
+    column: number;
+    hLength: number;
+    records: Array<IgesRecord>;
+    props: Array<IgesProp>;
+    lineNo: number;
+};
+
+// type ParsedDirectory = {
+// 	value: string;
+// }
+
+export type IgesData = {
+	rawMap: Map<Section, Array<string>>;
+	global: Array<IgesRecord>;
+	// directory: Array<IgesRecord>;
+	// parameters: Array<IgesRecord>;
+}
+
+type IgesProp = [number, string];
+type IgesRecord = Array<IgesProp>;
+
+// type IgesDirectory = Array<IgesProp>;
 
 const columns = {
 	sectionNo: 72,
 	max: 80
 }
 
-export const parse = (text: string): any[] => {
-    const ret = [];
-    const imap = igesMap(text);
 
-    const g = parseRecords(imap.get('G').join(''));
-    ret.push(g);
+// main parse function
+export const parse = (text: string): IgesData => {
+    const rawMap = igesMap(text);
+    const global = parseRecords(rawMap.get('G').join(''));
 
-    return ret;
+    return <IgesData>{
+		rawMap,
+		global,
+		// directory: new Array<Array<[number, string]>>(),
+		// paramters: new Array<Array<[number, string]>>()
+	};
 };
 
+
+// initial map parsing functions
 const sectionLetter = (line: string) => line[columns.sectionNo] as Section;
 const igesMap = (text: string) => {
     const ret = new Map<Section, Array<string>>();
@@ -29,6 +62,8 @@ const igesMap = (text: string) => {
     return ret;
 };
 
+
+// record parsing loop, don't really need this but it's handy
 const parseRecords = (text: string) => {
     console.time('parseRecords');
     const init = <ParsedRecord>{
@@ -36,30 +71,21 @@ const parseRecords = (text: string) => {
         position: 0,
         column: 0,
         hLength: 0,
-        record: new Array<Array<[number, string]>>(),
-        prop: new Array<[number, string]>(),
+        records: new Array<Array<[number, string]>>(),
+        props: new Array<[number, string]>(),
 		lineNo: 1
     };
 
-    const records = [...text].reduce((acc, val) => {
+    const ret = [...text].reduce((acc, val) => {
         return parseRecord(val, acc);
     }, init);
 
     console.timeEnd('parseRecords');
-    console.log(records.record);
-    return records;
+    console.log(ret.records);
+    return ret.records;
 };
 
-type ParsedRecord = {
-    value: string;
-    position: number;
-    column: number;
-    hLength: number;
-    record: Array<Array<[number, string]>>;
-    prop: Array<[number, string]>;
-	lineNo: number;
-};
-
+// record parsing function
 const parseRecord = (char: string, rec: ParsedRecord) => {
 	// make a copy of the incomming record
     let r = {...rec};
@@ -93,7 +119,7 @@ const parseRecord = (char: string, rec: ParsedRecord) => {
     switch (char) {
         // close prop and push to record
         case ',':
-            r.prop.push([r.lineNo, r.value]);
+            r.props.push([r.lineNo, r.value]);
             r.value = '';
             r.hLength = 0;
             r.position = 0;
@@ -102,9 +128,9 @@ const parseRecord = (char: string, rec: ParsedRecord) => {
         // close record
         case ';':
             if (r.value !== '') {
-                r.prop.push([r.lineNo, r.value]);
+                r.props.push([r.lineNo, r.value]);
             }
-            r.record.push(r.prop);
+            r.records.push(r.props);
             r.value = '';
             r.hLength = 0;
             r.position = 0;
@@ -185,40 +211,3 @@ const parseRecord = (char: string, rec: ParsedRecord) => {
 // };
 
 
-/**
- * Global section array map
- * from Iges 5.3 spec page 18
- * https://shocksolution.files.wordpress.com/2017/12/iges5-3_fordownload.pdf
- * I changed it to zero based, so everything is -1
- * 
- */
-type IgesType = 'string' | 'integer' | 'real'
-
-export const globalProperties = {
-    ParameterDelimiterCharacter: [0, 'string'],
-    RecordDelimiterCharacter: [1, 'string'],
-    ProductIdentifactionFromSender: [2, 'string'],
-    FileName: [3, 'string'],
-    NativeSystemId: [4, 'string'],
-    PreprocessorVersion: [5, 'string'],
-    NumberOfBinaryBitsForIntegerRepresentation: [6, 'integer'],
-    MaximumSinglePowerOfTenFromSender: [7, 'integer'],
-    MaximumSingleSignificantDigitsFromSender: [8, 'integer'],
-    MaximumDoublePowerOfTenFromSender: [9, 'integer'],
-    MaxumumDoubleSignificantDigitsFromSender: [10, 'integer'],
-    ProductIdentificationForReceiver: [11, 'integer'],
-    ModelSpaceScale: [12, 'real'],
-	UnitsFlag: [13, 'integer'],
-	UnitsName: [14, 'string'],
-	MaximunNumberOfLineweights: [15, 'integer'],
-	MaximumLineweight: [16, 'real'],
-	DateTimeOfFileGeneration: [17, 'string'],
-	MinimumModelResolution: [18, 'real'],
-	MaximumApproximateModelCoordinateValue: [19, 'real'],
-	AuthorName: [20, 'string'],
-	AuthorOrganization: [21, 'string'],
-	IgesVersionFlat: [22, 'integer'],
-	DraftingStandard: [23, 'integer'],
-	DateTimeOfModelCreation: [24, 'string'],
-	MilSpecProtocol: [25, 'string']
-};
