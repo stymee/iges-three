@@ -1,7 +1,5 @@
 type Section = 'S' | 'G' | 'D' | 'P' | 'T';
 
-//const lineNo = (line: string) => parseInt(line.slice(74));
-
 const columns = {
 	sectionNo: 72,
 	max: 80
@@ -185,3 +183,42 @@ const parseRecord = (char: string, rec: ParsedRecord) => {
 //     // console.log(`"${str}"=>${ret}`)
 //     return ret;
 // };
+
+
+/**
+ * Global section array map
+ * from Iges 5.3 spec page 18
+ * https://shocksolution.files.wordpress.com/2017/12/iges5-3_fordownload.pdf
+ * I changed it to zero based, so everything is -1
+ * 
+ */
+type IgesType = 'string' | 'integer' | 'real'
+
+export const globalProperties = {
+    ParameterDelimiterCharacter: [0, 'string'],
+    RecordDelimiterCharacter: [1, 'string'],
+    ProductIdentifactionFromSender: [2, 'string'],
+    FileName: [3, 'string'],
+    NativeSystemId: [4, 'string'],
+    PreprocessorVersion: [5, 'string'],
+    NumberOfBinaryBitsForIntegerRepresentation: [6, 'integer'],
+    MaximumSinglePowerOfTenFromSender: [7, 'integer'],
+    MaximumSingleSignificantDigitsFromSender: [8, 'integer'],
+    MaximumDoublePowerOfTenFromSender: [9, 'integer'],
+    MaxumumDoubleSignificantDigitsFromSender: [10, 'integer'],
+    ProductIdentificationForReceiver: [11, 'integer'],
+    ModelSpaceScale: [12, 'real'],
+	UnitsFlag: [13, 'integer'],
+	UnitsName: [14, 'string'],
+	MaximunNumberOfLineweights: [15, 'integer'],
+	MaximumLineweight: [16, 'real'],
+	DateTimeOfFileGeneration: [17, 'string'],
+	MinimumModelResolution: [18, 'real'],
+	MaximumApproximateModelCoordinateValue: [19, 'real'],
+	AuthorName: [20, 'string'],
+	AuthorOrganization: [21, 'string'],
+	IgesVersionFlat: [22, 'integer'],
+	DraftingStandard: [23, 'integer'],
+	DateTimeOfModelCreation: [24, 'string'],
+	MilSpecProtocol: [25, 'string']
+};
