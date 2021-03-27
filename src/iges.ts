@@ -1,4 +1,4 @@
-import {IgesData, parse} from './parser'
+import {IgesData, parse} from './parser';
 
 export const loadIgesFile = async (file: File): Promise<string> => {
     const perf = performance.now();
@@ -14,11 +14,9 @@ export const loadIgesFile = async (file: File): Promise<string> => {
     return `${(performance.now() - perf).toFixed(3)} ms to load |${file.name}|`;
 };
 
-
-
-export const getGlobalProperty = (iges: IgesData, prop:[number, IgesType]) => {
+export const getGlobalProperty = (iges: IgesData, prop: [number, IgesGlobalType]) => {
     const [propIndex, propType] = prop;
-    const [, propValue] = iges.global[0][propIndex]
+    const [, propValue] = iges.global[0][propIndex];
     switch (propType) {
         case 'string':
             return propValue;
@@ -27,71 +25,72 @@ export const getGlobalProperty = (iges: IgesData, prop:[number, IgesType]) => {
         case 'real':
             return parseFloat(propValue);
     }
-}
+};
 /**
  * Global section array map
  * from Iges 5.3 spec page 18
  * https://shocksolution.files.wordpress.com/2017/12/iges5-3_fordownload.pdf
  * I changed it to zero based, so everything is -1
- * 
  */
-type IgesType = 'string' | 'integer' | 'real'
-type IGlobalProperty = [number, IgesType];
+type IgesGlobalType = 'string' | 'integer' | 'real';
+type GlobalProperty = [number, IgesGlobalType];
 
 export const globalProperties = {
-    ParameterDelimiterCharacter: <IGlobalProperty>[0, 'string'],
-    RecordDelimiterCharacter: <IGlobalProperty>[1, 'string'],
-    ProductIdentifactionFromSender: <IGlobalProperty>[2, 'string'],
-    FileName: <IGlobalProperty>[3, 'string'],
-    NativeSystemId: <IGlobalProperty>[4, 'string'],
-    PreprocessorVersion: <IGlobalProperty>[5, 'string'],
-    NumberOfBinaryBitsForIntegerRepresentation: <IGlobalProperty>[6, 'integer'],
-    MaximumSinglePowerOfTenFromSender: <IGlobalProperty>[7, 'integer'],
-    MaximumSingleSignificantDigitsFromSender: <IGlobalProperty>[8, 'integer'],
-    MaximumDoublePowerOfTenFromSender: <IGlobalProperty>[9, 'integer'],
-    MaxumumDoubleSignificantDigitsFromSender: <IGlobalProperty>[10, 'integer'],
-    ProductIdentificationForReceiver: <IGlobalProperty>[11, 'integer'],
-    ModelSpaceScale: <IGlobalProperty>[12, 'real'],
-    UnitsFlag: <IGlobalProperty>[13, 'integer'],
-    UnitsName: <IGlobalProperty>[14, 'string'],
-    MaximunNumberOfLineweights: <IGlobalProperty>[15, 'integer'],
-    MaximumLineweight: <IGlobalProperty>[16, 'real'],
-    DateTimeOfFileGeneration: <IGlobalProperty>[17, 'string'],
-    MinimumModelResolution: <IGlobalProperty>[18, 'real'],
-    MaximumApproximateModelCoordinateValue: <IGlobalProperty>[19, 'real'],
-    AuthorName: <IGlobalProperty>[20, 'string'],
-    AuthorOrganization: <IGlobalProperty>[21, 'string'],
-    IgesVersionFlat: <IGlobalProperty>[22, 'integer'],
-    DraftingStandard: <IGlobalProperty>[23, 'integer'],
-    DateTimeOfModelCreation: <IGlobalProperty>[24, 'string'],
-    MilSpecProtocol: <IGlobalProperty>[25, 'string']
+    ParameterDelimiterCharacter: <GlobalProperty>[0, 'string'],
+    RecordDelimiterCharacter: <GlobalProperty>[1, 'string'],
+    ProductIdentifactionFromSender: <GlobalProperty>[2, 'string'],
+    FileName: <GlobalProperty>[3, 'string'],
+    NativeSystemId: <GlobalProperty>[4, 'string'],
+    PreprocessorVersion: <GlobalProperty>[5, 'string'],
+    NumberOfBinaryBitsForIntegerRepresentation: <GlobalProperty>[6, 'integer'],
+    MaximumSinglePowerOfTenFromSender: <GlobalProperty>[7, 'integer'],
+    MaximumSingleSignificantDigitsFromSender: <GlobalProperty>[8, 'integer'],
+    MaximumDoublePowerOfTenFromSender: <GlobalProperty>[9, 'integer'],
+    MaxumumDoubleSignificantDigitsFromSender: <GlobalProperty>[10, 'integer'],
+    ProductIdentificationForReceiver: <GlobalProperty>[11, 'integer'],
+    ModelSpaceScale: <GlobalProperty>[12, 'real'],
+    UnitsFlag: <GlobalProperty>[13, 'integer'],
+    UnitsName: <GlobalProperty>[14, 'string'],
+    MaximunNumberOfLineweights: <GlobalProperty>[15, 'integer'],
+    MaximumLineweight: <GlobalProperty>[16, 'real'],
+    DateTimeOfFileGeneration: <GlobalProperty>[17, 'string'],
+    MinimumModelResolution: <GlobalProperty>[18, 'real'],
+    MaximumApproximateModelCoordinateValue: <GlobalProperty>[19, 'real'],
+    AuthorName: <GlobalProperty>[20, 'string'],
+    AuthorOrganization: <GlobalProperty>[21, 'string'],
+    IgesVersionFlat: <GlobalProperty>[22, 'integer'],
+    DraftingStandard: <GlobalProperty>[23, 'integer'],
+    DateTimeOfModelCreation: <GlobalProperty>[24, 'string'],
+    MilSpecProtocol: <GlobalProperty>[25, 'string']
 };
 
-// interface IGlobalProperties {
-//     ParameterDelimiterCharacter: [number, IgesType];
-//     RecordDelimiterCharacter: [number, IgesType];
-//     ProductIdentifactionFromSender: [number, IgesType];
-//     FileName: [number, IgesType];
-//     NativeSystemId: [number, IgesType];
-//     PreprocessorVersion: [number, IgesType];
-//     NumberOfBinaryBitsForIntegerRepresentation: [number, IgesType];
-//     MaximumSinglePowerOfTenFromSender: [number, IgesType];
-//     MaximumSingleSignificantDigitsFromSender: [number, IgesType];
-//     MaximumDoublePowerOfTenFromSender: [number, IgesType];
-//     MaxumumDoubleSignificantDigitsFromSender: [number, IgesType];
-//     ProductIdentificationForReceiver: [number, IgesType];
-//     ModelSpaceScale: [number, IgesType];
-// 	UnitsFlag: [number, IgesType];
-// 	UnitsName: [number, IgesType];
-// 	MaximunNumberOfLineweights: [number, IgesType];
-// 	MaximumLineweight: [number, IgesType];
-// 	DateTimeOfFileGeneration: [number, IgesType];
-// 	MinimumModelResolution: [number, IgesType];
-// 	MaximumApproximateModelCoordinateValue: [number, IgesType];
-// 	AuthorName: [number, IgesType];
-// 	AuthorOrganization: [number, IgesType];
-// 	IgesVersionFlat: [number, IgesType];
-// 	DraftingStandard: [number, IgesType];
-// 	DateTimeOfModelCreation: [number, IgesType];
-// 	MilSpecProtocol: [number, IgesType];
-// }
+
+/**
+ * Directory Entry section array map
+ * from Iges 5.3 spec page 24
+ * https://shocksolution.files.wordpress.com/2017/12/iges5-3_fordownload.pdf
+ * I changed it to zero based, so everything is -1
+ */
+type IgesDirectoryType = 'integer' | 'pointer' | 'integerpointer' | 'zeropointer' | 'string'
+type DirectoryProperty = {index: number, line: number, column: number, dType: IgesDirectoryType};
+
+export const directoryProperties = {
+    entityType: <DirectoryProperty>{index: 0, line: 1, column: 1, dType: 'integer'},
+    parameterData: <DirectoryProperty>{index: 1, line: 1, column: 9, dType: 'pointer'},
+    structure: <DirectoryProperty>{index: 2, line: 1, column: 17, dType: 'integerpointer'},
+    lineFontPattern: <DirectoryProperty>{index: 3, line: 1, column: 25, dType: 'integerpointer'},
+    level: <DirectoryProperty>{index: 4, line: 1, column: 33, dType: 'integerpointer'},
+    view: <DirectoryProperty>{index: 5, line: 1, column: 41, dType: 'zeropointer'},
+    transformationMatrix: <DirectoryProperty>{index: 6, line: 1, column: 49, dType: 'zeropointer'},
+    labelDisplayAssoc: <DirectoryProperty>{index: 7, line: 1, column: 57, dType: 'zeropointer'},
+    status: <DirectoryProperty>{index: 8, line: 1, column: 65, dType: 'string'},
+    sequence: <DirectoryProperty>{index: 9, line: 1, column: 73, dType: 'integer'},
+    // skip second entityType at start of second line
+    lineWeight: <DirectoryProperty>{index: 11, line: 2, column: 9, dType: 'integer'},
+    color: <DirectoryProperty>{index: 12, line: 2, column: 17, dType: 'integerpointer'},
+    parameterLineCount: <DirectoryProperty>{index: 13, line: 2, column: 25, dType: 'integer'},
+    form: <DirectoryProperty>{index: 14, line: 2, column: 33, dType: 'integer'},
+    // skip 2 reserved fields at 15 and 16
+    label: <DirectoryProperty>{index: 17, line: 2, column: 57, dType: 'string'},
+    subscript: <DirectoryProperty>{index: 18, line: 2, column: 65, dType: 'integer'}
+};

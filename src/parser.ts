@@ -128,6 +128,7 @@ const parseRecord = (char: string, rec: ParsedRecord) => {
         // close record
         case ';':
             if (r.value !== '') {
+				// need this for the spaces after a semi-colon
                 r.props.push([r.lineNo, r.value]);
             }
             r.records.push(r.props);
