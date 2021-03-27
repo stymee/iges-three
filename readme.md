@@ -22,7 +22,7 @@ Here's a picture of my dogs just to keep y'all interested:
 
 and can't leave out my chickens:
 
-![](https://lh3.googleusercontent.com/pw/ACtC-3exkkUecffGo6UD8UMotUKgJTSSVXvzXZ2uUMvBih1x_K3cxJWQaRK2fNTJb9amy5_v9b8EHOe6ubIxHjeV6YClm7NCe_kXvcE9IaSEB8wA0F85_Dl0disntaMEefxX5Jz05yDZAj8F8gXSKfjb4U9F4A=w2280-h1109-no?authuser=0)
+![](https://lh3.googleusercontent.com/pw/ACtC-3fEEYVj_h58QbfUbn3gb59iVlxqGMNnAW448wZk5rAgwMVtcMsOvvhXYq03XiuTTlpeb-hxcCEAWhHr1XoTkkzvCOblInYz0pCJPvTWVMRppmH3JkO-p3IHpWD_3n1g2K_WZheH7n-eCTPj-Corn4CRQA=w2273-h1944-no)
 
 ## built on Vite and Typescript
 
