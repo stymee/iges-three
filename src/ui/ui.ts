@@ -16,12 +16,12 @@ export const initUI = () => {
     const helperGroup = new THREE.Group();
     helperGroup.name = `helpers`;
     helperGroup.add(new THREE.AxesHelper(5));
-    const box = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), new THREE.MeshNormalMaterial());
+    const box = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshNormalMaterial());
     helperGroup.add(box);
     scene.add(helperGroup);
 
     const camera = new THREE.PerspectiveCamera(5, window.innerWidth / window.innerHeight, 0.001, 10000);
-    camera.position.set(200, 400, 600);
+    camera.position.set(100, 200, 300);
 
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;

@@ -1,8 +1,8 @@
-import {defaultEntity} from './standard';
+import {defaultEntity} from './iges-standard';
 
 // record parsing loop, don't really need this but it's handy
 export const parseDirectoryEntities = (textArray: Array<string>) => {
-    console.time('parseDirectoryEntities');
+    // console.time('parseDirectoryEntities');
 
     const ret = textArray
         .map((_v, i, arr) => {
@@ -12,7 +12,7 @@ export const parseDirectoryEntities = (textArray: Array<string>) => {
         })
         .filter(s => s);
 
-    console.timeEnd('parseDirectoryEntities');
+    // console.timeEnd('parseDirectoryEntities');
     return ret;
 };
 

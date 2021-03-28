@@ -1,4 +1,4 @@
-import {defaultGlobalRecord, igesColumnMarkers} from './standard';
+import {defaultGlobalRecord, igesColumnMarkers} from './iges-standard';
 
 type ParsedRecord = {
     value: string;
@@ -9,7 +9,7 @@ type ParsedRecord = {
 
 // main parsing loop
 export const parseGlobalRecords = (text: string) => {
-    console.time('parseGlobalRecord');
+    // console.time('parseGlobalRecord');
     const init = <ParsedRecord>{
         value: '',
         column: 1,
@@ -28,7 +28,7 @@ export const parseGlobalRecords = (text: string) => {
             obj.value = parsed.props[obj.index];
         }
     })
-    console.timeEnd('parseGlobalRecord');
+    // console.timeEnd('parseGlobalRecord');
     return ret;
 };
 

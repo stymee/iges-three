@@ -1,7 +1,7 @@
-import { igesColumnMarkers, IgesData, Section } from './standard';
-import { parseDirectoryEntities } from './section-d';
-import { parseGlobalRecords } from './section-g';
-import { parseParameterRecords } from './section-p';
+import { igesColumnMarkers, IgesData, Section } from './iges-standard';
+import { parseDirectoryEntities } from './parse-entities';
+import { parseGlobalRecords } from './parse-global';
+import { parseParameterRecords } from './parse-parameters';
 
 
 // the whole shebang
@@ -19,23 +19,26 @@ export const parse = (text: string): IgesData => {
     };
 };
 
-export const loadIgesFile = async (file: File): Promise<string> => {
+export const loadIgesFile = async (file: File): Promise<IgesData> => {
     const perf = performance.now();
     console.log(`in loadIges, file is ${file.name}`);
 
     const text = await file.text();
     const iges = parse(text);
     
-    console.log('parameter delimiter', iges.global.ParameterDelimiterCharacter.value);
-    console.log('record delimiter', iges.global.RecordDelimiterCharacter.value);
-    console.log('author name', iges.global.AuthorName.value);
-    console.log('min resolution', iges.global.MinimumModelResolution.value);
+    // examples on how to get to stuff
+    // console.log('parameter delimiter', iges.global.ParameterDelimiterCharacter.value);
+    // console.log('record delimiter', iges.global.RecordDelimiterCharacter.value);
+    // console.log('author name', iges.global.AuthorName.value);
+    // console.log('min resolution', iges.global.MinimumModelResolution.value);
 
-    console.log('Global', iges.global);
-    console.log('Entities', iges.entities);
-    console.log('Parameters', iges.parameters);
+    // console.log('Global', iges.global);
+    // console.log('Entities', iges.entities);
+    // console.log('Parameters', iges.parameters);
 
-    return `${(performance.now() - perf).toFixed(3)} ms to load |${file.name}|`;
+    console.log(`${(performance.now() - perf).toFixed(3)} ms to load |${file.name}|`);
+
+    return iges;
 };
 
 

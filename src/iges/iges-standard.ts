@@ -159,3 +159,11 @@ export const defaultEntity = () => {
  */
 export type IgesParameterRecord = {seqNo: number; values: Array<string>};
 
+export const entityTypes = {
+    CircularArc: '100',
+    CompositeCurve: '102',
+    Line: '110',
+    Point: '116',
+    TransformationMatrix: '124',
+    ClosureProperty: '406'
+}

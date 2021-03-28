@@ -1,5 +1,6 @@
 // point
 // page 102
+
 // 4.16 Point Entity (Type 116)
 // A point is defined by its coordinates in definition space. An optional pointer to a Subfigure Definition ECO630
 // Entity (Type 308) references a display symbol. Examples of the Point Entity are shown in Figure 28.
@@ -25,19 +26,19 @@
 // specified.
 
 import { BufferAttribute, BufferGeometry, Points, PointsMaterial } from "three";
-import { IgesData, IgesParameterRecord } from "../iges-standard";
+import { IgesData, IgesParameterRecord } from "../iges/iges-standard";
 
 
-export const pointAsVector3 = (parameters: IgesParameterRecord, iges: IgesData) => {
+export const threePoint = (parameters: IgesParameterRecord, iges: IgesData) => {
 	const geometry = new BufferGeometry();
 	const material = new PointsMaterial({
 		color: '#00ffff',
-		size: 4
+		size: 2
 	});
 
-	const xyz = parameters.values.slice(1,3).map(s => parseFloat(s));
+	const positions = new Float32Array(parameters.values.slice(1,4).map(s => parseFloat(s)));
 
-	geometry.setAttribute('position', new BufferAttribute(xyz, 3))
+	geometry.setAttribute('position', new BufferAttribute(positions, 3))
 	const point = new Points(
 		geometry,
 		material

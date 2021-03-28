@@ -1,4 +1,4 @@
-import {igesColumnMarkers, IgesParameterRecord} from './standard';
+import {igesColumnMarkers, IgesParameterRecord} from './iges-standard';
 
 type ParsedRecord = {
     value: string;
@@ -12,7 +12,7 @@ type ParsedRecord = {
 
 // record parsing loop, don't really need this but it's handy
 export const parseParameterRecords = (text: string) => {
-    console.time('parseParameterRecords');
+    // console.time('parseParameterRecords');
     const init = <ParsedRecord>{
         value: '',
         column: 1,
@@ -27,7 +27,7 @@ export const parseParameterRecords = (text: string) => {
         return parseParameterRecord(val, acc);
     }, init);
 
-    console.timeEnd('parseParameterRecords');
+    // console.timeEnd('parseParameterRecords');
     return ret.records;
 };
 
