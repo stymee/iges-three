@@ -1,9 +1,10 @@
-import {igesColumnMarkers, IgesParameterRecord} from './iges-spec';
+import {igesColumnMarkers, IgesParameterRecord} from './iges-standard';
 
 type ParsedRecord = {
     value: string;
     column: number;
     hLength: number;
+    complete: boolean;
     seqNo: string;
     records: Array<IgesParameterRecord>;
     record: IgesParameterRecord;
@@ -16,6 +17,7 @@ export const parseParameterRecords = (text: string) => {
         value: '',
         column: 1,
         hLength: 0,
+        complete: false,
         seqNo: '',
         records: new Array<IgesParameterRecord>(),
         record: <IgesParameterRecord>{seqNo: 0, values: new Array<string>()}
@@ -56,10 +58,18 @@ export const parseParameterRecord = (char: string, rec: ParsedRecord): ParsedRec
             switch (char) {
                 // push value
                 case ',':
+                    r.record.values.push(r.value);
+                    r.value = '';
+                    r.hLength = 0;
+                    r.seqNo = '';
+                    break;
+
+                // push value and set complete to wait for seqNo
                 case ';':
                     r.record.values.push(r.value);
                     r.value = '';
                     r.hLength = 0;
+                    r.complete = true;
                     r.seqNo = '';
                     break;
 
@@ -86,9 +96,12 @@ export const parseParameterRecord = (char: string, rec: ParsedRecord): ParsedRec
     // col 74
     // end of sequence section is beginning of section label
     else if (r.column === igesColumnMarkers.sectionNo) {
-        r.record.seqNo = parseInt(r.seqNo);
-        r.records.push(r.record);
-        r.record = <IgesParameterRecord>{seqNo: 0, values: new Array<string>()};
+        if (r.complete) {
+            r.record.seqNo = parseInt(r.seqNo);
+            r.records.push(r.record);
+            r.record = <IgesParameterRecord>{seqNo: 0, values: new Array<string>()};
+            r.complete = false;
+        }
     }
 
     // col 75-79

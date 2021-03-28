@@ -7,14 +7,14 @@ export type IgesData = {
 
 //export type IgesProp = {line: number, number, string};
 export type IgesGlobalRecord = Array<string>;
-export type IgesParameterRecord = {seqNo: number, values: Array<string>};
+export type IgesParameterRecord = {seqNo: number; values: Array<string>};
 
 export type Section = 'S' | 'G' | 'D' | 'P' | 'T';
 
 export const igesColumnMarkers = {
     seqNoColumn: 66,
     sectionNo: 74,
-    max: 80,
+    max: 80
 };
 
 /**
@@ -68,7 +68,6 @@ export const getGlobalProperty = (iges: IgesData, prop: [number, IgesGlobalPrope
     }
 };
 
-
 /**
  * Directory Entry section array map
  * from Iges 5.3 spec page 24
@@ -102,23 +101,25 @@ export type IgesEntity = {
     subscript: IgesEntityProperty;
 };
 
-export const defaultEntityProperties = {
-    entityType: <IgesEntityProperty>{index: 0, line: 1, column: 1, dType: 'integer', value: ''},
-    parameterData: <IgesEntityProperty>{index: 1, line: 1, column: 9, dType: 'pointer', value: ''},
-    structure: <IgesEntityProperty>{index: 2, line: 1, column: 17, dType: 'integerpointer', value: ''},
-    lineFontPattern: <IgesEntityProperty>{index: 3, line: 1, column: 25, dType: 'integerpointer', value: ''},
-    level: <IgesEntityProperty>{index: 4, line: 1, column: 33, dType: 'integerpointer', value: ''},
-    view: <IgesEntityProperty>{index: 5, line: 1, column: 41, dType: 'zeropointer', value: ''},
-    transformationMatrix: <IgesEntityProperty>{index: 6, line: 1, column: 49, dType: 'zeropointer', value: ''},
-    labelDisplayAssoc: <IgesEntityProperty>{index: 7, line: 1, column: 57, dType: 'zeropointer', value: ''},
-    status: <IgesEntityProperty>{index: 8, line: 1, column: 65, dType: 'string', value: ''},
-    sequence: <IgesEntityProperty>{index: 9, line: 1, column: 73, dType: 'integer', value: ''},
-    // skip second entityType at start of second line
-    lineWeight: <IgesEntityProperty>{index: 11, line: 2, column: 9, dType: 'integer', value: ''},
-    color: <IgesEntityProperty>{index: 12, line: 2, column: 17, dType: 'integerpointer', value: ''},
-    parameterLineCount: <IgesEntityProperty>{index: 13, line: 2, column: 25, dType: 'integer', value: ''},
-    form: <IgesEntityProperty>{index: 14, line: 2, column: 33, dType: 'integer', value: ''},
-    // skip 2 reserved fields at 15 and 16
-    label: <IgesEntityProperty>{index: 17, line: 2, column: 57, dType: 'string', value: ''},
-    subscript: <IgesEntityProperty>{index: 18, line: 2, column: 65, dType: 'integer', value: ''}
+export const defaultEntity = () => {
+    return <IgesEntity>{
+        entityType: <IgesEntityProperty>{index: 0, line: 1, column: 1, dType: 'integer', value: ''},
+        parameterData: <IgesEntityProperty>{index: 1, line: 1, column: 9, dType: 'pointer', value: ''},
+        structure: <IgesEntityProperty>{index: 2, line: 1, column: 17, dType: 'integerpointer', value: ''},
+        lineFontPattern: <IgesEntityProperty>{index: 3, line: 1, column: 25, dType: 'integerpointer', value: ''},
+        level: <IgesEntityProperty>{index: 4, line: 1, column: 33, dType: 'integerpointer', value: ''},
+        view: <IgesEntityProperty>{index: 5, line: 1, column: 41, dType: 'zeropointer', value: ''},
+        transformationMatrix: <IgesEntityProperty>{index: 6, line: 1, column: 49, dType: 'zeropointer', value: ''},
+        labelDisplayAssoc: <IgesEntityProperty>{index: 7, line: 1, column: 57, dType: 'zeropointer', value: ''},
+        status: <IgesEntityProperty>{index: 8, line: 1, column: 65, dType: 'string', value: ''},
+        sequence: <IgesEntityProperty>{index: 9, line: 1, column: 74, dType: 'integer', value: ''},
+        // skip second entityType at start of second line
+        lineWeight: <IgesEntityProperty>{index: 11, line: 2, column: 9, dType: 'integer', value: ''},
+        color: <IgesEntityProperty>{index: 12, line: 2, column: 17, dType: 'integerpointer', value: ''},
+        parameterLineCount: <IgesEntityProperty>{index: 13, line: 2, column: 25, dType: 'integer', value: ''},
+        form: <IgesEntityProperty>{index: 14, line: 2, column: 33, dType: 'integer', value: ''},
+        // skip 2 reserved fields at 15 and 16
+        label: <IgesEntityProperty>{index: 17, line: 2, column: 57, dType: 'string', value: ''},
+        subscript: <IgesEntityProperty>{index: 18, line: 2, column: 65, dType: 'integer', value: ''}
+    };
 };

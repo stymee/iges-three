@@ -1,5 +1,5 @@
-import { getGlobalProperty, globalProperties, igesColumnMarkers, IgesData, Section } from './iges-spec';
-import { parseEntities } from './iges-d-section';
+import { getGlobalProperty, globalProperties, igesColumnMarkers, IgesData, Section } from './iges-standard';
+import { parseDirectoryEntities } from './iges-d-section';
 import { parseGlobalRecords } from './iges-g-section';
 import { parseParameterRecords } from './iges-p-section';
 
@@ -8,7 +8,7 @@ import { parseParameterRecords } from './iges-p-section';
 export const parse = (text: string): IgesData => {
     const rawMap = igesMap(text);
     const global = parseGlobalRecords(rawMap.get('G').join(''));
-    const entities = parseEntities(rawMap.get('D').join(''));
+    const entities = parseDirectoryEntities(rawMap.get('D'));
     const parameters = parseParameterRecords(rawMap.get('P').join(''));
 
     return <IgesData>{
@@ -26,8 +26,10 @@ export const loadIgesFile = async (file: File): Promise<string> => {
     const text = await file.text();
     const iges = parse(text);
     
-    console.log(getGlobalProperty(iges, globalProperties.AuthorName));
-    console.log(getGlobalProperty(iges, globalProperties.MinimumModelResolution));
+    console.log('parameter delimiter', getGlobalProperty(iges, globalProperties.ParameterDelimiterCharacter));
+    console.log('record delimiter', getGlobalProperty(iges, globalProperties.RecordDelimiterCharacter));
+    console.log('author name', getGlobalProperty(iges, globalProperties.AuthorName));
+    console.log('min resolution', getGlobalProperty(iges, globalProperties.MinimumModelResolution));
 
     console.log('Global', iges.global);
     console.log('Entities', iges.entities);

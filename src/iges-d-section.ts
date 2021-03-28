@@ -1,49 +1,19 @@
-import {IgesEntity} from './iges-spec';
-
-type ParsedEntity = {
-    value: string;
-    position: number;
-    column: number;
-    hLength: number;
-    entities: Array<IgesEntity>;
-    lineNo: number;
-    skipUntilEnd: boolean;
-};
-
+import {defaultEntity} from './iges-standard';
 
 // record parsing loop, don't really need this but it's handy
-export const parseEntities = (text: string) => {
-    console.time('parseEntities');
+export const parseDirectoryEntities = (textArray: Array<string>) => {
+    console.time('parseDirectoryEntities');
 
-    // const ret = new Array<IgesEntity>()
-    const init = <ParsedEntity>{};
+    const ret = textArray
+        .map((_v, i, arr) => {
+            if (i % 2 === 0) {
+                return parseEntity(arr[i] + arr[i+1]);
+            }
+        })
+        .filter(s => s);
 
-    //debugger;
-    const ret = [...text].reduce((acc, val) => {
-        return parseEntity(val, acc);
-    }, init);
-
-    //console.log(ret.records);
-    //return ret.records;
-
-    // const ret = textArray
-    //     .map((v, i, me) => {
-    //         if (i % 2 === 0) {
-    //             const row = parseDentity({line1: me[i], line2: me[i + 1]});
-    //             return row;
-    //         }
-    //     })
-    //     .filter(s => s);
-
-    console.timeEnd('parseEntities');
-    //console.log(ret);
-    return ret.entities;
-};
-
-const parseEntity = (text: string, entity: ParsedEntity) => {
-
-
-    return <ParsedEntity>{};
+    console.timeEnd('parseDirectoryEntities');
+    return ret;
 };
 
 // D - directory section
@@ -57,25 +27,20 @@ const parseEntity = (text: string, entity: ParsedEntity) => {
      406       0       0       1      15                               0D      2
 */
 
-const parseDentity = (p: {line1: string; line2: string}) => {
-    const plen = 8;
-    const pcount = 10;
-    const ret = new Array<string>();
-    for (let i = 0; i < pcount; i++) {
-        const prop = parseDentityProp({line: p.line1, i: i, len: plen});
-        ret.push(prop);
-    }
-    for (let i = 0; i < pcount; i++) {
-        const prop = parseDentityProp({line: p.line2, i: i, len: plen});
-        ret.push(prop);
-    }
-    return ret;
-};
+const parseEntity = (text: string) => {
+    // get a standard entity
+    const ret = defaultEntity();
 
-const parseDentityProp = (p: {line: string; i: number; len: number}) => {
-    const str = p.line.slice(p.i * p.len, p.i * p.len + p.len);
-    //const ret = parseInt(str);
-    // console.log(`"012345678" ${p.i}`)
-    // console.log(`"${str}"=>${ret}`)
-    return str.trim();
+    Object.entries(ret).forEach((v) => {
+        const [key, obj] = v;
+        // ToDo: this is a little hacky, but oh well
+        //  I can either set the column start in the default object after the section
+        //  or chop off the leading character
+        const len = key === 'sequence' ? 7 : 8;
+        const start = (obj.line - 1) * 80 + obj.column - 1;
+        const stop = start + len;
+        obj.value = text.slice(start, stop).trim();
+    })
+
+    return ret;
 };
