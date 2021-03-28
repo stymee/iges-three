@@ -10,8 +10,6 @@ type ParsedEntity = {
     skipUntilEnd: boolean;
 };
 
-const init = <ParsedEntity>{
-};
 
 // record parsing loop, don't really need this but it's handy
 export const parseEntities = (text: string) => {
@@ -25,7 +23,6 @@ export const parseEntities = (text: string) => {
         return parseEntity(val, acc);
     }, init);
 
-    console.timeEnd('parseRecords');
     //console.log(ret.records);
     //return ret.records;
 
@@ -40,12 +37,12 @@ export const parseEntities = (text: string) => {
 
     console.timeEnd('parseEntities');
     //console.log(ret);
-    return ret;
+    return ret.entities;
 };
 
 const parseEntity = (text: string, entity: ParsedEntity) => {
 
-    
+
     return <ParsedEntity>{};
 };
 

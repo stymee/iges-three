@@ -1,14 +1,15 @@
 import { getGlobalProperty, globalProperties, igesColumnMarkers, IgesData, Section } from './iges-spec';
-import { parseEntities } from './iges-entity';
-import { parseRecords } from './iges-record';
+import { parseEntities } from './iges-d-section';
+import { parseGlobalRecords } from './iges-g-section';
+import { parseParameterRecords } from './iges-p-section';
 
 
 // the whole shebang
 export const parse = (text: string): IgesData => {
     const rawMap = igesMap(text);
-    const global = parseRecords(rawMap.get('G').join(''));
+    const global = parseGlobalRecords(rawMap.get('G').join(''));
     const entities = parseEntities(rawMap.get('D').join(''));
-    const parameters = parseRecords(rawMap.get('P').join(''));
+    const parameters = parseParameterRecords(rawMap.get('P').join(''));
 
     return <IgesData>{
         rawMap,
@@ -38,7 +39,7 @@ export const loadIgesFile = async (file: File): Promise<string> => {
 
 
 // initial map parsing functions
-const sectionLetter = (line: string) => line[igesColumnMarkers.sectionNo] as Section;
+const sectionLetter = (line: string) => line[igesColumnMarkers.sectionNo - 2] as Section;
 const igesMap = (text: string) => {
     const ret = new Map<Section, Array<string>>();
     ret.set('S', new Array<string>());

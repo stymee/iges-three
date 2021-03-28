@@ -1,43 +1,37 @@
-import { igesColumnMarkers, IgesProp, IgesRecord } from "./iges-spec";
+import { igesColumnMarkers, IgesGlobalRecord } from "./iges-spec";
 
 type ParsedRecord = {
     value: string;
     position: number;
     column: number;
     hLength: number;
-    records: Array<IgesRecord>;
-    props: Array<IgesProp>;
-    lineNo: number;
-    skipUntilEnd: boolean;
+    props: Array<string>;
 };
 
 
 // record parsing loop, don't really need this but it's handy
-export const parseRecords = (text: string) => {
-    console.time('parseRecords');
+export const parseGlobalRecords = (text: string): IgesGlobalRecord => {
+    console.time('parseGlobal');
     const init = <ParsedRecord>{
         value: '',
         position: 0,
         column: 0,
         hLength: 0,
-        records: new Array<Array<[number, string]>>(),
-        props: new Array<[number, string]>(),
-        lineNo: 1,
-        skipUntilEnd: false
+        props: new Array<string>(),
     };
 
     //debugger;
     const ret = [...text].reduce((acc, val) => {
-        return parseRecord(val, acc);
+        return parseGlobalRecord(val, acc);
     }, init);
 
-    console.timeEnd('parseRecords');
+    console.timeEnd('parseGlobal');
     //console.log(ret.records);
-    return ret.records;
+    return ret.props;
 };
 
 // record parsing function
-export const parseRecord = (char: string, rec: ParsedRecord) => {
+export const parseGlobalRecord = (char: string, rec: ParsedRecord) => {
     // make a copy of the incomming record
     let r = {...rec};
 
@@ -50,8 +44,9 @@ export const parseRecord = (char: string, rec: ParsedRecord) => {
 
     // back to the beginning of a new colum
     if (r.column > igesColumnMarkers.max) {
-        r.lineNo++;
-        r.skipUntilEnd = false;
+        // r.lineNo++;
+        //r.seqNo = '';
+        // r.lookForSeqNo = false;
         r.column = 1;
     }
 
@@ -71,7 +66,7 @@ export const parseRecord = (char: string, rec: ParsedRecord) => {
     switch (char) {
         // close prop and push to record
         case ',':
-            r.props.push([r.lineNo, r.value]);
+            r.props.push(r.value);
             r.value = '';
             r.hLength = 0;
             r.position = 0;
@@ -79,15 +74,7 @@ export const parseRecord = (char: string, rec: ParsedRecord) => {
 
         // close record
         case ';':
-            if (r.value !== '') {
-                // need this for the spaces after a semi-colon
-                r.props.push([r.lineNo, r.value]);
-            }
-            r.records.push(r.props);
-            r.props = new Array<[number, string]>();
-            r.value = '';
-            r.hLength = 0;
-            r.position = 0;
+            // we done!
             break;
 
         // Hollerith string start
@@ -95,16 +82,12 @@ export const parseRecord = (char: string, rec: ParsedRecord) => {
             r.hLength = parseInt(r.value);
             r.position = 0;
             r.value = '';
-            r.skipUntilEnd = false;
             break;
+        
 
         // ongoing capture
         default:
-            if (r.hLength === 0 && char === ' ') {
-                r.skipUntilEnd = true;
-            }
-            r.value += r.skipUntilEnd ? '' : char;
-            r.position++;
+            r.value += char.trim();
             break;
     }
 

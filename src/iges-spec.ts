@@ -1,18 +1,20 @@
 export type IgesData = {
     rawMap: Map<Section, Array<string>>;
-    global: Array<IgesRecord>;
+    global: IgesGlobalRecord;
     entities: Array<IgesEntity>;
-    parameters: Array<IgesRecord>;
+    parameters: Array<IgesParameterRecord>;
 };
 
-export type IgesProp = [number, string];
-export type IgesRecord = Array<IgesProp>;
+//export type IgesProp = {line: number, number, string};
+export type IgesGlobalRecord = Array<string>;
+export type IgesParameterRecord = {seqNo: number, values: Array<string>};
 
 export type Section = 'S' | 'G' | 'D' | 'P' | 'T';
 
 export const igesColumnMarkers = {
-    sectionNo: 72,
-    max: 80
+    seqNoColumn: 66,
+    sectionNo: 74,
+    max: 80,
 };
 
 /**
@@ -55,7 +57,7 @@ export const globalProperties = {
 
 export const getGlobalProperty = (iges: IgesData, prop: [number, IgesGlobalPropertyType]) => {
     const [propIndex, propType] = prop;
-    const [, propValue] = iges.global[0][propIndex];
+    const propValue = iges.global[propIndex];
     switch (propType) {
         case 'string':
             return propValue;
