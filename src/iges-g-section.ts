@@ -1,94 +1,85 @@
-import { igesColumnMarkers, IgesGlobalRecord } from "./iges-spec";
+import {igesColumnMarkers, IgesGlobalRecord} from './iges-spec';
 
 type ParsedRecord = {
     value: string;
-    position: number;
     column: number;
     hLength: number;
-    props: Array<string>;
+    record: IgesGlobalRecord;
 };
 
-
 // record parsing loop, don't really need this but it's handy
-export const parseGlobalRecords = (text: string): IgesGlobalRecord => {
-    console.time('parseGlobal');
+export const parseGlobalRecords = (text: string) => {
+    console.time('parseGlobalRecord');
     const init = <ParsedRecord>{
         value: '',
-        position: 0,
-        column: 0,
+        column: 1,
         hLength: 0,
-        props: new Array<string>(),
+        record: new Array<string>()
     };
 
-    //debugger;
     const ret = [...text].reduce((acc, val) => {
         return parseGlobalRecord(val, acc);
     }, init);
 
-    console.timeEnd('parseGlobal');
-    //console.log(ret.records);
-    return ret.props;
+    console.timeEnd('parseGlobalRecord');
+    return ret.record;
 };
 
-// record parsing function
-export const parseGlobalRecord = (char: string, rec: ParsedRecord) => {
+/**
+ * Parser state is copied and modified based on incomming character
+ * @param char single character
+ * @param rec Previous ParsedRecord value
+ * @returns new ParsedRecord
+ */
+export const parseGlobalRecord = (char: string, rec: ParsedRecord): ParsedRecord => {
     // make a copy of the incomming record
     let r = {...rec};
 
+    // the column we're actually working on
     r.column++;
 
-    // line number section, throw this out
-    if (r.column >= igesColumnMarkers.sectionNo + 1 && r.column <= igesColumnMarkers.max) {
-        return r;
+    // col 1-73
+    // actual data, with only hollerith strings continuing across a line (i think)
+    if (r.column < igesColumnMarkers.sectionNo) {
+        // if we are capturing a Hollerith string and still under length,
+        // this could include one of our terminators below
+        if (r.hLength > 0 && r.value.length < r.hLength) {
+            r.value += char;
+        } else {
+            // process char
+            switch (char) {
+                // push value
+                case ',':
+                case ';':
+                    r.record.push(r.value);
+                    r.value = '';
+                    r.hLength = 0;
+                    break;
+
+                // Hollerith string start
+                case 'H':
+                    r.hLength = parseInt(r.value);
+                    r.value = '';
+                    break;
+
+                // ongoing capture
+                default:
+                    r.value += char.trim();
+                    break;
+            }
+        }
     }
 
+    // col 74-79
+    // section label thru line number section, throw this out
+    else if (r.column >= igesColumnMarkers.sectionNo && r.column <= igesColumnMarkers.max) {
+        // do nothing
+    }
+
+    // col 80
     // back to the beginning of a new colum
-    if (r.column > igesColumnMarkers.max) {
-        // r.lineNo++;
-        //r.seqNo = '';
-        // r.lookForSeqNo = false;
+    else {
         r.column = 1;
-    }
-
-    // if our captured string is at Hollerith length
-    if (r.position >= r.hLength) {
-        r.hLength = 0;
-    }
-
-    // we are capturing a Hollerith string and still under length,
-    //  capture more and continue
-    if (r.hLength > 0 && r.position <= r.hLength) {
-        r.value += char;
-        r.position++;
-        return r;
-    }
-
-    switch (char) {
-        // close prop and push to record
-        case ',':
-            r.props.push(r.value);
-            r.value = '';
-            r.hLength = 0;
-            r.position = 0;
-            break;
-
-        // close record
-        case ';':
-            // we done!
-            break;
-
-        // Hollerith string start
-        case 'H':
-            r.hLength = parseInt(r.value);
-            r.position = 0;
-            r.value = '';
-            break;
-        
-
-        // ongoing capture
-        default:
-            r.value += char.trim();
-            break;
     }
 
     return r;
