@@ -7,31 +7,20 @@ import {
     Group,
     Points,
     PointsMaterial,
-    Matrix4,
 } from 'three';
 import {entityFromSeqNo} from '../iges/iges-main';
 import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
+import { threeTransformationMatrixFromSeqNo } from './transformation-matrix-124';
 
 export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData) => {
-    // console.log('parameters are ', parameters.values);
+
     const [z, x1, y1, x2, y2, x3, y3] = parameters.values.slice(1, 10).map(s => parseFloat(s));
     const radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     const angleStart = Math.atan(y2 / x2);
     const angleStop = Math.atan(y3 / x3);
 
     const entity = entityFromSeqNo(parameters.seqNo, iges);
-    // console.log('arcEntity is', arcEntity);
-    //const transformationEntity = entityFromSeqNo(parseInt(arcEntity.transformationMatrix.value), iges);
-    // console.log('tEntity is', transformationEntity);
-    const transformationParameters = iges.parameters.find(
-        s => s.seqNo === parseInt(entity.transformationMatrix.value)
-    );
-    const [r11, r12, r13, t1, r21, r22, r23, t2, r31, r32, r33, t3] = transformationParameters.values
-        .slice(1, 13)
-        .map(s => parseFloat(s));
-    const mat4 = new Matrix4();
-    mat4.set(r11, r12, r13, t1, r21, r22, r23, t2, r31, r32, r33, t3, 0, 0, 0, 1);
-    // console.log('mat4 is', mat4);
+    const mat4 = threeTransformationMatrixFromSeqNo(entity.transformationMatrix.value, iges);
 
     const ellipseCurve = new EllipseCurve(x1, y1, radius, radius, angleStart, angleStop, false, 0);
 
@@ -57,6 +46,7 @@ export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData
 	
     arc.applyMatrix4(mat4);
     vertexPoints.applyMatrix4(mat4);
+    vertexPoints.visible = false;
 
     const group = new Group();
     group.add(vertexPoints);

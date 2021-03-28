@@ -5,7 +5,8 @@ export const threePoint = (parameters: IgesParameterRecord, iges: IgesData) => {
     const geometry = new BufferGeometry();
     const material = new PointsMaterial({
         color: '#00ffff',
-        size: 1
+        size: 1 * window.devicePixelRatio,
+        sizeAttenuation: false
     });
 
     const positions = new Float32Array(parameters.values.slice(1, 4).map(s => parseFloat(s)));
@@ -15,6 +16,8 @@ export const threePoint = (parameters: IgesParameterRecord, iges: IgesData) => {
 
     return point;
 };
+
+
 
 // point
 // page 102
