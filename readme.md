@@ -26,7 +26,7 @@ and can't leave out my chickens:
 
 # built on Vite and Typescript
 
-Vite is just awesome, you can't beat the minimalist configuration (check out the size of the vite.config file).
+Vite is just awesome, you can't beat the minimalist configuration (check out the size of the vite.config file if you don't believe me).
 
 Haha, did you go looking for it? There isn't one, sweet defaults ftw! Not that I actually know anything, but the node_modules directory seems much lighter than other build tools/frameworks. How long did that npm install take? If you think that was cool, wait till you see how fast the initial dev build is! The hot reloads are equally life altering.
 
@@ -45,4 +45,16 @@ npm run build
 
 # Stay Tuned!
 
-Famouse last words, I'm sure. As of this writing, I'm just gettig through the parsing phase. I will most likely only have the basic wireframe entities working anytime soon.
+Famous last words, I'm sure. As of this writing, I'm just getting through the parsing phase. I will most likely only have the basic wireframe entities working anytime soon.  I'll be working on this in my spare time, so no guarantees.  Hopefully whatever I get done will be of some use to someone somewhere.
+
+
+
+#### A parting quote:
+
+
+> 
+> Aspire to be the person your dog(s) think that you are. 
+> 
+
+-anonymous dog owner
+

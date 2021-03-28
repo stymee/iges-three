@@ -1,21 +1,52 @@
-import { IgesEntity } from "./iges-spec";
+import {IgesEntity} from './iges-spec';
+
+type ParsedEntity = {
+    value: string;
+    position: number;
+    column: number;
+    hLength: number;
+    entities: Array<IgesEntity>;
+    lineNo: number;
+    skipUntilEnd: boolean;
+};
+
+const init = <ParsedEntity>{
+};
 
 // record parsing loop, don't really need this but it's handy
-export const parseEntities = (textArray: Array<string>) => {
+export const parseEntities = (text: string) => {
     console.time('parseEntities');
 
-    const ret = textArray
-        .map((v, i, me) => {
-            if (i % 2 === 0) {
-                const row = parseDentity({line1: me[i], line2: me[i + 1]});
-                return row;
-            }
-        })
-        .filter(s => s);
+    // const ret = new Array<IgesEntity>()
+    const init = <ParsedEntity>{};
+
+    //debugger;
+    const ret = [...text].reduce((acc, val) => {
+        return parseEntity(val, acc);
+    }, init);
+
+    console.timeEnd('parseRecords');
+    //console.log(ret.records);
+    //return ret.records;
+
+    // const ret = textArray
+    //     .map((v, i, me) => {
+    //         if (i % 2 === 0) {
+    //             const row = parseDentity({line1: me[i], line2: me[i + 1]});
+    //             return row;
+    //         }
+    //     })
+    //     .filter(s => s);
 
     console.timeEnd('parseEntities');
     //console.log(ret);
-    return new Array<IgesEntity>();
+    return ret;
+};
+
+const parseEntity = (text: string, entity: ParsedEntity) => {
+
+    
+    return <ParsedEntity>{};
 };
 
 // D - directory section

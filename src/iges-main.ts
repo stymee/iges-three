@@ -7,7 +7,7 @@ import { parseRecords } from './iges-record';
 export const parse = (text: string): IgesData => {
     const rawMap = igesMap(text);
     const global = parseRecords(rawMap.get('G').join(''));
-    const entities = parseEntities(rawMap.get('D'));
+    const entities = parseEntities(rawMap.get('D').join(''));
     const parameters = parseRecords(rawMap.get('P').join(''));
 
     return <IgesData>{
