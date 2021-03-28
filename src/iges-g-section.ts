@@ -1,28 +1,35 @@
-import {igesColumnMarkers, IgesGlobalRecord} from './iges-standard';
+import {defaultGlobalRecord, igesColumnMarkers} from './iges-standard';
 
 type ParsedRecord = {
     value: string;
     column: number;
     hLength: number;
-    record: IgesGlobalRecord;
+    props: Array<string>;
 };
 
-// record parsing loop, don't really need this but it's handy
+// main parsing loop
 export const parseGlobalRecords = (text: string) => {
     console.time('parseGlobalRecord');
     const init = <ParsedRecord>{
         value: '',
         column: 1,
         hLength: 0,
-        record: new Array<string>()
+        props: new Array<string>()
     };
 
-    const ret = [...text].reduce((acc, val) => {
+    const parsed = [...text].reduce((acc, val) => {
         return parseGlobalRecord(val, acc);
     }, init);
 
+    const ret = defaultGlobalRecord();
+    Object.entries(ret).forEach((v) => {
+        const [_key, obj] = v;
+        if (parsed.props.length >= obj.index) {
+            obj.value = parsed.props[obj.index];
+        }
+    })
     console.timeEnd('parseGlobalRecord');
-    return ret.record;
+    return ret;
 };
 
 /**
@@ -51,7 +58,7 @@ export const parseGlobalRecord = (char: string, rec: ParsedRecord): ParsedRecord
                 // push value
                 case ',':
                 case ';':
-                    r.record.push(r.value);
+                    r.props.push(r.value);
                     r.value = '';
                     r.hLength = 0;
                     break;

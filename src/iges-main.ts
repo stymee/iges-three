@@ -1,4 +1,4 @@
-import { getGlobalProperty, globalProperties, igesColumnMarkers, IgesData, Section } from './iges-standard';
+import { igesColumnMarkers, IgesData, Section } from './iges-standard';
 import { parseDirectoryEntities } from './iges-d-section';
 import { parseGlobalRecords } from './iges-g-section';
 import { parseParameterRecords } from './iges-p-section';
@@ -26,10 +26,10 @@ export const loadIgesFile = async (file: File): Promise<string> => {
     const text = await file.text();
     const iges = parse(text);
     
-    console.log('parameter delimiter', getGlobalProperty(iges, globalProperties.ParameterDelimiterCharacter));
-    console.log('record delimiter', getGlobalProperty(iges, globalProperties.RecordDelimiterCharacter));
-    console.log('author name', getGlobalProperty(iges, globalProperties.AuthorName));
-    console.log('min resolution', getGlobalProperty(iges, globalProperties.MinimumModelResolution));
+    console.log('parameter delimiter', iges.global.ParameterDelimiterCharacter.value);
+    console.log('record delimiter', iges.global.RecordDelimiterCharacter.value);
+    console.log('author name', iges.global.AuthorName.value);
+    console.log('min resolution', iges.global.MinimumModelResolution.value);
 
     console.log('Global', iges.global);
     console.log('Entities', iges.entities);
