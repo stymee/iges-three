@@ -29,6 +29,14 @@ export const createGeometry = (iges: IgesData) => {
                 groups.get(v.values[0]).add(threeCircularArc(v, iges));
                 break;
 
+            case entityTypes.TransformationMatrix:
+                // will calculte transformations on the fly, just don't want to show an error
+                break;
+                
+                case entityTypes.ClosureProperty:
+                // will pull names and form data on the fly, just don't want to show an error
+                break;
+
             default:
                 console.log(`Unsupported Entity Type:${v.values[0]}, skipping creation...`);
         }

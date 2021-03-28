@@ -1,6 +1,73 @@
+import {
+    BufferAttribute,
+    BufferGeometry,
+    LineBasicMaterial,
+    Line,
+    EllipseCurve,
+    Group,
+    Points,
+    PointsMaterial,
+    Matrix4,
+} from 'three';
+import {entityFromSeqNo} from '../iges/iges-main';
+import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
+
+export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData) => {
+    // console.log('parameters are ', parameters.values);
+    const [z, x1, y1, x2, y2, x3, y3] = parameters.values.slice(1, 10).map(s => parseFloat(s));
+    const radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const angleStart = Math.atan(y2 / x2);
+    const angleStop = Math.atan(y3 / x3);
+
+    const entity = entityFromSeqNo(parameters.seqNo, iges);
+    // console.log('arcEntity is', arcEntity);
+    //const transformationEntity = entityFromSeqNo(parseInt(arcEntity.transformationMatrix.value), iges);
+    // console.log('tEntity is', transformationEntity);
+    const transformationParameters = iges.parameters.find(
+        s => s.seqNo === parseInt(entity.transformationMatrix.value)
+    );
+    const [r11, r12, r13, t1, r21, r22, r23, t2, r31, r32, r33, t3] = transformationParameters.values
+        .slice(1, 13)
+        .map(s => parseFloat(s));
+    const mat4 = new Matrix4();
+    mat4.set(r11, r12, r13, t1, r21, r22, r23, t2, r31, r32, r33, t3, 0, 0, 0, 1);
+    // console.log('mat4 is', mat4);
+
+    const ellipseCurve = new EllipseCurve(x1, y1, radius, radius, angleStart, angleStop, false, 0);
+
+    const vertexPoints = new Points(
+        new BufferGeometry(),
+        new PointsMaterial({
+            color: '#ffff00',
+            size: 1.5 * window.devicePixelRatio,
+            sizeAttenuation: false
+        })
+    );
+    const positions = new Float32Array([x1, y1, z, x2, y2, z, x3, y3, z]);
+    vertexPoints.geometry.setAttribute('position', new BufferAttribute(positions, 3));
+
+    const arc = new Line(
+        new BufferGeometry(),
+        new LineBasicMaterial({
+            color: '#0000ff'
+        })
+    );
+
+    arc.geometry.setFromPoints(ellipseCurve.getPoints(500));
+	
+    arc.applyMatrix4(mat4);
+    vertexPoints.applyMatrix4(mat4);
+
+    const group = new Group();
+    group.add(vertexPoints);
+    group.add(arc);
+
+
+    return group;
+};
+
 // line
 // page 64
-
 // 4.3 Circular Arc Entity (Type 100)
 // A circular arc is a connected portion of a circle which has distinct
 // ARC ENTITY (TYPE 100)
@@ -26,7 +93,6 @@
 // the solid arc is defined using point A as the start point and point B as the terminate point. If the
 // complementary dashed arc were desired, the start point listed in the parameter data entry would be
 // B, and the terminate point would be A.
-// ©USPRO 1996. Copying or reprinting not allowed without permission. 64
 // 4.3 CIRCULAR ARC ENTITY (TYPE 100)
 // Directory Entry
 // (1) (2) (3) (4) (5) (6) (7) (8)
@@ -54,51 +120,3 @@
 // 5 Y2 Real Start point ordinate
 // 6 X3 Real Terminate point abscissa
 // 7 Y3 Real Terminate point ordinate
-
-import {
-    BufferAttribute,
-    BufferGeometry,
-    LineBasicMaterial,
-    Line,
-    EllipseCurve,
-    Group,
-    Points,
-    PointsMaterial
-} from 'three';
-import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
-
-export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData) => {
-	console.log('parameters are ', parameters.values)
-    const [z, x1, y1, x2, y2, x3, y3] = parameters.values.slice(1, 10).map(s => parseFloat(s));
-    const radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-	const angleStart = Math.atan(y2 / x2);
-	const angleStop = Math.atan(y3 / x3)
-	console.log(`angleStart: ${angleStart.toFixed(3)}, angleStop: ${angleStop.toFixed(3)}`)
-
-    const ellipseCurve = new EllipseCurve(x1, y1, radius, radius, angleStart, angleStop, false, 0);
-
-    const vertexPoints = new Points(
-        new BufferGeometry(),
-        new PointsMaterial({
-            color: '#ffff00',
-            size: 1
-        })
-    );
-    const positions = new Float32Array([x1, y1, z, x2, y2, z, x3, y3, z]);
-    vertexPoints.geometry.setAttribute('position', new BufferAttribute(positions, 3));
-
-    const arc = new Line(
-        new BufferGeometry(),
-        new LineBasicMaterial({
-            color: '#0000ff'
-        })
-    );
-
-    arc.geometry.setFromPoints(ellipseCurve.getPoints(50));
-
-    const group = new Group();
-    group.add(vertexPoints);
-    group.add(arc);
-
-    return group;
-};

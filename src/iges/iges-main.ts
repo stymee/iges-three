@@ -1,8 +1,7 @@
-import { igesColumnMarkers, IgesData, Section } from './iges-standard';
-import { parseDirectoryEntities } from './parse-entities';
-import { parseGlobalRecords } from './parse-global';
-import { parseParameterRecords } from './parse-parameters';
-
+import {igesColumnMarkers, IgesData, Section} from './iges-standard';
+import {parseDirectoryEntities} from './parse-entities';
+import {parseGlobalRecords} from './parse-global';
+import {parseParameterRecords} from './parse-parameters';
 
 // the whole shebang
 export const parse = (text: string): IgesData => {
@@ -25,7 +24,7 @@ export const loadIgesFile = async (file: File): Promise<IgesData> => {
 
     const text = await file.text();
     const iges = parse(text);
-    
+
     // examples on how to get to stuff
     // console.log('parameter delimiter', iges.global.ParameterDelimiterCharacter.value);
     // console.log('record delimiter', iges.global.RecordDelimiterCharacter.value);
@@ -41,7 +40,6 @@ export const loadIgesFile = async (file: File): Promise<IgesData> => {
     return iges;
 };
 
-
 // initial map parsing functions
 const sectionLetter = (line: string) => line[igesColumnMarkers.sectionNoIndex] as Section;
 const igesMap = (text: string) => {
@@ -56,3 +54,8 @@ const igesMap = (text: string) => {
         .forEach(s => ret.get(sectionLetter(s)).push(s));
     return ret;
 };
+
+export const entityFromSeqNo = (seqNo: number, iges: IgesData) =>
+    iges.entities.find(s => parseInt(s.sequence.value) === seqNo);
+
+

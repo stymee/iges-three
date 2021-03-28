@@ -17,6 +17,7 @@ export const initUI = () => {
     helperGroup.name = `helpers`;
     helperGroup.add(new THREE.AxesHelper(5));
     const box = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshNormalMaterial());
+    box.position.set(0, 0, -0.5);
     helperGroup.add(box);
     scene.add(helperGroup);
 

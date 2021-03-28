@@ -1,6 +1,22 @@
+import {BufferAttribute, BufferGeometry, LineBasicMaterial, Line} from 'three';
+import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
+
+export const threeLine = (parameters: IgesParameterRecord, iges: IgesData) => {
+    const geometry = new BufferGeometry();
+    const material = new LineBasicMaterial({
+        color: '#00ff00'
+    });
+
+    const positions = new Float32Array(parameters.values.slice(1, 7).map(s => parseFloat(s)));
+
+    geometry.setAttribute('position', new BufferAttribute(positions, 3));
+    const line = new Line(geometry, material);
+
+    return line;
+};
+
 // line
 // page 119
-
 // 4.13 Line Entity (Type 110, Form 0) ECO646
 // A line is a bounded, connected portion of a straight line which has distinct start and terminate ECO630
 // points.
@@ -31,20 +47,3 @@
 // 4 X2 Real Terminate Point P2
 // 5 Y2 Real
 // 6 Z2 Real
-
-import {BufferAttribute, BufferGeometry, LineBasicMaterial, Line} from 'three';
-import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
-
-export const threeLine = (parameters: IgesParameterRecord, iges: IgesData) => {
-    const geometry = new BufferGeometry();
-    const material = new LineBasicMaterial({
-        color: '#00ff00'
-    });
-
-    const positions = new Float32Array(parameters.values.slice(1, 7).map(s => parseFloat(s)));
-
-    geometry.setAttribute('position', new BufferAttribute(positions, 3));
-    const line = new Line(geometry, material);
-
-    return line;
-};
