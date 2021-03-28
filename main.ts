@@ -1,6 +1,6 @@
 import './style.css';
-import { initUI } from './src/ui';
-import { loadIgesFile } from './src/iges-main';
+import { initUI } from './src/ui/ui';
+import { loadIgesFile } from './src/iges/main';
 
 const ui = initUI()
 

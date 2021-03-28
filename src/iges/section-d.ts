@@ -1,4 +1,4 @@
-import {defaultEntity} from './iges-standard';
+import {defaultEntity} from './standard';
 
 // record parsing loop, don't really need this but it's handy
 export const parseDirectoryEntities = (textArray: Array<string>) => {

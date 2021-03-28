@@ -10,6 +10,7 @@ export type Section = 'S' | 'G' | 'D' | 'P' | 'T';
 export const igesColumnMarkers = {
     seqNoColumn: 66,
     sectionNo: 74,
+    sectionNoIndex: 72,
     max: 80
 };
 

@@ -1,4 +1,4 @@
-import {defaultGlobalRecord, igesColumnMarkers} from './iges-standard';
+import {defaultGlobalRecord, igesColumnMarkers} from './standard';
 
 type ParsedRecord = {
     value: string;
