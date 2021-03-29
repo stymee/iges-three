@@ -1,15 +1,15 @@
 import * as THREE from 'three';
+import {Vector2, Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 export const initUI = () => {
     const canvas = <HTMLCanvasElement>document.getElementById('webgl');
     const btnFile = <HTMLButtonElement>document.getElementById('btnFile');
     const inputFile = <HTMLInputElement>document.getElementById('inputFile');
+    const spanMouse = <HTMLSpanElement>document.getElementById('spanMouse');
+    const spanHover = <HTMLSpanElement>document.getElementById('spanHover');
 
-    const mouse = {
-        x: 0,
-        y: 0
-    };
+    const mouse = new Vector2(1, 1);
 
     const scene = new THREE.Scene();
 
@@ -42,7 +42,7 @@ export const initUI = () => {
     /**
      * event listeners
      */
-    btnFile.addEventListener('click', () => inputFile.click())
+    btnFile.addEventListener('click', () => inputFile.click());
 
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -51,10 +51,21 @@ export const initUI = () => {
         renderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
 
-    canvas.addEventListener('mousemove', (e: MouseEvent) => {
-        mouse.x = (canvas.clientLeft - e.clientX - 1) * 2;
-        mouse.y = -(canvas.clientTop - e.clientY - 1) * 2;
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        spanMouse.textContent = mouseText(mouse);
     });
+
+    const mouseText = (m: Vector2) => {
+        const px = m.x >= 0 ? '+' : '';
+        const py = m.y >= 0 ? '+' : '';
+        return `m ${px}${m.x.toFixed(3)}, ${py}${m.y.toFixed(3)}`;
+    }
+
+    const setHover = (text: string) => {
+        spanHover.textContent = text;
+    }
 
     // run this at each render
     const tick = (): void => {
@@ -62,12 +73,13 @@ export const initUI = () => {
         renderer3d.render(scene, camera);
     };
 
-
-	return {
-		scene,
-		camera,
-		mouse,
-		tick,
+    return {
+        scene,
+        camera,
+        helperGroup,
+        setHover,
+        mouse,
+        tick,
         inputFile
-	}
+    };
 };

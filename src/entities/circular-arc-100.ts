@@ -10,20 +10,21 @@ import {
 } from 'three';
 import {entityFromSeqNo} from '../iges/iges-main';
 import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
+import { nameProperty } from './name-property-406';
 import { threeTransformationMatrixFromSeqNo } from './transformation-matrix-124';
 
 export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData) => {
 
-    const [z, x1, y1, x2, y2, x3, y3] = parameters.values.slice(1, 10).map(s => parseFloat(s));
-    const radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    const angleStart = Math.atan(y2 / x2);
-    const angleStop = Math.atan(y3 / x3);
-
     const entity = entityFromSeqNo(parameters.seqNo, iges);
-    const mat4 = threeTransformationMatrixFromSeqNo(entity.transformationMatrix.value, iges);
-
-    const ellipseCurve = new EllipseCurve(x1, y1, radius, radius, angleStart, angleStop, false, 0);
-
+    
+    let label = entity.label.value;
+    if (!label) {
+        // not in the directory data, have to look up a 406 form15 name property
+        // the sequence number of the 406 directory is in the last field of the parameters array
+        label = nameProperty(parameters.values[parameters.values.length-1], iges);
+    }
+    
+    const {ellipseCurve, mat4, positions} = threeCircularArcCurve(parameters, iges);
     const vertexPoints = new Points(
         new BufferGeometry(),
         new PointsMaterial({
@@ -32,7 +33,7 @@ export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData
             sizeAttenuation: false
         })
     );
-    const positions = new Float32Array([x1, y1, z, x2, y2, z, x3, y3, z]);
+    // const positions = new Float32Array([x1, y1, z, x2, y2, z, x3, y3, z]);
     vertexPoints.geometry.setAttribute('position', new BufferAttribute(positions, 3));
 
     const arc = new Line(
@@ -43,6 +44,7 @@ export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData
     );
 
     arc.geometry.setFromPoints(ellipseCurve.getPoints(500));
+    arc.name = label;
 	
     arc.applyMatrix4(mat4);
     vertexPoints.applyMatrix4(mat4);
@@ -56,6 +58,35 @@ export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData
     return group;
 };
 
+
+
+export const threeCircularArcCurve = (parameters: IgesParameterRecord, iges: IgesData) => {
+    const [z, x1, y1, x2, y2, x3, y3] = parameters.values.slice(1, 10).map(s => parseFloat(s));
+    const radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const angleStart = Math.atan(y2 / x2);
+    const angleStop = Math.atan(y3 / x3);
+
+    const entity = entityFromSeqNo(parameters.seqNo, iges);
+
+    const mat4 = threeTransformationMatrixFromSeqNo(entity.transformationMatrix.value, iges);
+
+    const ellipseCurve = new EllipseCurve(x1, y1, radius, radius, angleStart, angleStop, false, 0);
+    const positions = new Float32Array([x1, y1, z, x2, y2, z, x3, y3, z]);
+
+    return { ellipseCurve, mat4, positions };
+};
+
+
+export const threeCircularArcPoints = (parameters: IgesParameterRecord, iges: IgesData) => {
+
+    const {ellipseCurve, mat4,} = threeCircularArcCurve(parameters, iges);
+    const geometry = new BufferGeometry();
+    geometry.setFromPoints(ellipseCurve.getPoints(500));
+    geometry.applyMatrix4(mat4);
+
+    return geometry;
+
+}
 // line
 // page 64
 // 4.3 Circular Arc Entity (Type 100)

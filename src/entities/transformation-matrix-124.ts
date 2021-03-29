@@ -1,8 +1,9 @@
 import {Matrix4} from 'three';
 import {IgesData} from '../iges/iges-standard';
 
-export const threeTransformationMatrixFromSeqNo = (seqNo: string, iges: IgesData) => {
-    const parameters = iges.parameters.find(s => s.seqNo === parseInt(seqNo));
+export const threeTransformationMatrixFromSeqNo = (seqNo: number | string, iges: IgesData) => {
+    let seq = typeof seqNo === 'number' ? seqNo : parseInt(seqNo);
+    const parameters = iges.parameters.find(s => s.seqNo === seq);
     const [r11, r12, r13, t1, r21, r22, r23, t2, r31, r32, r33, t3] = parameters.values
         .slice(1, 13)
         .map(s => parseFloat(s));

@@ -1,5 +1,18 @@
+import {IgesData} from '../iges/iges-standard';
+
+export const nameProperty = (seqNo: number | string, iges: IgesData) => {
+	let seq = typeof(seqNo) === 'number' ? seqNo : parseInt(seqNo);
+	if (seq <= 0) {
+		return '';
+	}
+    const parameters = iges.parameters.find(s => s.seqNo === seq);
+	console.log(parameters);
+	debugger;
+    return parameters[2];
+};
+
 // form properties
-// page 62
+// page 448 !!
 
 // 4.111 Name Property (Form 15)
 // This property attaches a string which specifies a user-defined name. It can be used for any entity ECO630
@@ -10,4 +23,3 @@
 // Index Name Type Description
 // 1 NP Integer Number of property values (NP=l)
 // 2 NAME String Entity Name
-

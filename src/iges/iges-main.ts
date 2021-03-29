@@ -55,7 +55,9 @@ const igesMap = (text: string) => {
     return ret;
 };
 
-export const entityFromSeqNo = (seqNo: number, iges: IgesData) =>
-    iges.entities.find(s => parseInt(s.sequence.value) === seqNo);
+export const entityFromSeqNo = (seqNo: number | string, iges: IgesData) => {
+	let seq = typeof(seqNo) === 'number' ? seqNo : parseInt(seqNo);
+    return iges.entities.find(s => parseInt(s.sequence.value) === seq);
+}
 
 

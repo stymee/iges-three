@@ -1,4 +1,4 @@
-import {BufferAttribute, BufferGeometry, LineBasicMaterial, Line} from 'three';
+import {BufferAttribute, BufferGeometry, LineBasicMaterial, Line, LineCurve3, Vector3} from 'three';
 import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
 
 export const threeLine = (parameters: IgesParameterRecord, iges: IgesData) => {
@@ -14,6 +14,12 @@ export const threeLine = (parameters: IgesParameterRecord, iges: IgesData) => {
 
     return line;
 };
+
+export const threeLineCurve = (parameters: IgesParameterRecord) => {
+    const [x1,y1,z1,x2,y2,z2] = parameters.values.slice(1,7).map(s => parseFloat(s));
+    return new LineCurve3(new Vector3(x1,y1,z1), new Vector3(x2,y2,z2));
+};
+
 
 // line
 // page 119
