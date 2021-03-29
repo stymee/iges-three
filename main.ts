@@ -3,7 +3,7 @@ import {initUI} from './src/ui/ui';
 import {loadIgesFile} from './src/iges/iges-main';
 import {createGeometry} from './src/three/three-main';
 import * as THREE from 'three';
-import { entityTypes } from './src/iges/iges-standard';
+
 
 const ui = initUI();
 const raycaster = new THREE.Raycaster();
