@@ -3,11 +3,13 @@
 ## Updates 3/28/21
 
 Import works for the following iges types
-100 - Circular Arcs (including 124 transformation matrices)
-110 - Lines
-116 - Points
+-100 - Circular Arcs (including 124 transformation matrices)
+-110 - Lines
+-116 - Points
 
-Still working on 102 Composite curves as well as name properties 406
+Still working on 
+-102 Composite curves
+-name properties 406
 
 
 ## Hello fellow interweb dwellers!
