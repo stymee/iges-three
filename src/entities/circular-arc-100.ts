@@ -4,7 +4,7 @@ import {
     LineBasicMaterial,
     Line,
     EllipseCurve,
-    Group,
+    Object3D,
     Points,
     PointsMaterial,
 } from 'three';
@@ -13,7 +13,7 @@ import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
 import { nameProperty } from './name-property-406';
 import { threeTransformationMatrixFromSeqNo } from './transformation-matrix-124';
 
-export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData) => {
+export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData): Array<Object3D> => {
 
     const entity = entityFromSeqNo(parameters.seqNo, iges);
     
@@ -45,17 +45,19 @@ export const threeCircularArc = (parameters: IgesParameterRecord, iges: IgesData
 
     arc.geometry.setFromPoints(ellipseCurve.getPoints(500));
     arc.name = label;
+    arc.userData = parameters;
 	
     arc.applyMatrix4(mat4);
     vertexPoints.applyMatrix4(mat4);
-    vertexPoints.visible = false;
 
-    const group = new Group();
-    group.add(vertexPoints);
-    group.add(arc);
+    // vertexPoints.visible = false;
+
+    // const group = new Group();
+    // group.add(vertexPoints);
+    // group.add(arc);
 
 
-    return group;
+    return [vertexPoints, arc];
 };
 
 

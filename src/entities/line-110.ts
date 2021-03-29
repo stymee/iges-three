@@ -1,7 +1,7 @@
-import {BufferAttribute, BufferGeometry, LineBasicMaterial, Line, LineCurve3, Vector3} from 'three';
+import {BufferAttribute, BufferGeometry, LineBasicMaterial, Line, LineCurve3, Vector3, Object3D} from 'three';
 import {IgesData, IgesParameterRecord} from '../iges/iges-standard';
 
-export const threeLine = (parameters: IgesParameterRecord, iges: IgesData) => {
+export const threeLine = (parameters: IgesParameterRecord, iges: IgesData): Object3D => {
     const geometry = new BufferGeometry();
     const material = new LineBasicMaterial({
         color: '#00ff00'
